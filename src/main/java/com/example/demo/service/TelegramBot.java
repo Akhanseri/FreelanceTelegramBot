@@ -112,9 +112,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage()&&update.getMessage().hasText()){
             if(update.getMessage().getText().equals("2")){
                 userInfo.setBotState(BotState.ASK_NAME);
+                userRepository.save(userInfo);
                 SendMessage profileMessage = new SendMessage();
                 profileMessage.setChatId(update.getMessage().getChatId());
                 profileMessage.setText("Давайте заполним ваш профиль.\nВведите ваше имя.");
+                try {
+                    execute(profileMessage);
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else if (update.getMessage().getText().equals("1")){
                 SendMessage profileMessage = new SendMessage();
@@ -239,7 +245,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(userInfo);
             SendMessage profileMessage = new SendMessage();
             profileMessage.setChatId(update.getMessage().getChatId());
-            profileMessage.setText("Напишите сумму за ваши услуги.");
+            profileMessage.setText("Напишите ценовую политику за каждую вашу услугу." + "\n" + "Например: Настроить таргет - 50.000 тенге ");
 
             try {
                 execute(profileMessage);
@@ -306,7 +312,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(userInfo);
             SendMessage profileMessage = new SendMessage();
             profileMessage.setChatId(update.getMessage().getChatId());
-            profileMessage.setText("Расскажите о вас.");
+            profileMessage.setText("Расскажите о себе \n Это самое первое, что видят клиенты, поэтому учитывайте это. Выделяйтесь, описывая свой опыт своими словами.");
             try {
                 execute(profileMessage);
             } catch (TelegramApiException e) {
@@ -330,6 +336,45 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage()&&update.getMessage().hasText()){
             UserProfile existingProfile = userProfileRepository.findByUserInfo(userInfo);
             existingProfile.setNumber(update.getMessage().getText());
+            userProfileRepository.save(existingProfile);
+            userInfo.setBotState(BotState.ASK_SPECIALIZATION);
+            userRepository.save(userInfo);
+            SendMessage profileMessage = new SendMessage();
+            profileMessage.setChatId(update.getMessage().getChatId());
+            profileMessage.setText("Выберите вашу специальность.");
+            ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
+            List<KeyboardRow> keyboardRowList = new ArrayList<>();
+            KeyboardRow keyboardRow = new KeyboardRow();
+            keyboardRow.add(new KeyboardButton("Смм"));
+            keyboardRow.add(new KeyboardButton("Дизайнер"));
+            keyboardRowList.add(keyboardRow);
+
+            keyboardRow = new KeyboardRow();
+            keyboardRow.add(new KeyboardButton("Таргетолог"));
+            keyboardRow.add(new KeyboardButton("Мобилограф"));
+            keyboardRowList.add(keyboardRow);
+
+            keyboardRow = new KeyboardRow();
+            keyboardRow.add(new KeyboardButton("It специалист"));
+            keyboardRow.add(new KeyboardButton("Монтажер"));
+            keyboardRowList.add(keyboardRow);
+
+            replyKeyboardMarkup.setKeyboard(keyboardRowList);
+            profileMessage.setReplyMarkup(replyKeyboardMarkup);
+
+
+            try {
+                execute(profileMessage);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(update.getMessage().hasContact()){
+            UserProfile existingProfile = userProfileRepository.findByUserInfo(userInfo);
+            String num = update.getMessage().getContact().getPhoneNumber();
+            existingProfile.setNumber(num);
             userProfileRepository.save(existingProfile);
             userInfo.setBotState(BotState.ASK_SPECIALIZATION);
             userRepository.save(userInfo);
@@ -389,9 +434,23 @@ public class TelegramBot extends TelegramLongPollingBot {
                 userRepository.save(userInfo);
                 userProfileRepository.save(userProfile);
 
+
                 SendMessage profileMessage = new SendMessage();
                 profileMessage.setChatId(update.getMessage().getChatId());
                 profileMessage.setText("Введите ваш номер телефона.");
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(true);
+                List<KeyboardRow> keyboardRowList = new ArrayList<>();
+                KeyboardRow keyboardRow = new KeyboardRow();
+                KeyboardButton keyboardButton = new KeyboardButton();
+                keyboardButton.setText("Отправить номер");
+                keyboardButton.setRequestContact(true);
+                keyboardRow.add(keyboardButton);
+                keyboardRowList.add(keyboardRow);
+                replyKeyboardMarkup.setKeyboard(keyboardRowList);
+                profileMessage.setReplyMarkup(replyKeyboardMarkup);
                 try {
                     execute(profileMessage);
                 } catch (TelegramApiException e) {
@@ -407,6 +466,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 SendMessage profileMessage = new SendMessage();
                 profileMessage.setChatId(update.getMessage().getChatId());
                 profileMessage.setText("Введите ваш номер телефона.");
+                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(true);
+                List<KeyboardRow> keyboardRowList = new ArrayList<>();
+                KeyboardRow keyboardRow = new KeyboardRow();
+                KeyboardButton keyboardButton = new KeyboardButton();
+                keyboardButton.setText("Отправить номер");
+                keyboardButton.setRequestContact(true);
+                keyboardRow.add(keyboardButton);
+                keyboardRowList.add(keyboardRow);
+                replyKeyboardMarkup.setKeyboard(keyboardRowList);
+                profileMessage.setReplyMarkup(replyKeyboardMarkup);
                 try {
                     execute(profileMessage);
                 } catch (TelegramApiException e) {

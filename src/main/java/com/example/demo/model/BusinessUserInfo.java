@@ -22,4 +22,6 @@ public class BusinessUserInfo {
     private Long chatId;
 
     private String number;
+
+    private BusinessBotState botState;
 }
