@@ -1,0 +1,17 @@
+com/example/demo/repository/UserProfileRepository.class
+com/example/demo/repository/UserRepository.class
+com/example/demo/model/UserInfo.class
+com/example/demo/service/TelegramBusinessBot.class
+com/example/demo/DemoApplication.class
+com/example/demo/model/BusinessBotState.class
+com/example/demo/config/BotConfig.class
+com/example/demo/model/Order.class
+com/example/demo/service/TelegramBot.class
+com/example/demo/config/BotInitializer.class
+com/example/demo/model/UserProfile.class
+com/example/demo/model/BotState.class
+com/example/demo/model/BusinessUserInfo.class
+com/example/demo/repository/OrderRepository.class
+com/example/demo/config/BusinessBotConfig.class
+com/example/demo/repository/BusinessUserRepository.class
+com/example/demo/config/BusinessBotInitializer.class
