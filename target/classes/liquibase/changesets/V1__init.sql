@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS business_user_info (
 -- Create table business_order
 CREATE TABLE IF NOT EXISTS business_order (
                                               id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                                              description VARCHAR(255),
+                                              description VARCHAR(1000),
     sum VARCHAR(255),
     deadline VARCHAR(255),
     business_user_info_id BIGINT,
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS user_profile (
                                             name VARCHAR(255),
     number VARCHAR(255),
     specialization VARCHAR(255),
-    description VARCHAR(255),
-    projects VARCHAR(255),
+    description VARCHAR(1000),
+    projects VARCHAR(500),
     money VARCHAR(255),
     user_info_id BIGINT,
     FOREIGN KEY (user_info_id) REFERENCES user_info(id)
