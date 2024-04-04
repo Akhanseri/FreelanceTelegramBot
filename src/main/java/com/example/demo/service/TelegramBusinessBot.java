@@ -233,10 +233,10 @@ public class TelegramBusinessBot extends TelegramLongPollingBot {
 
                 // Формируем сообщение о профиле пользователя, исключая номер телефона
                 String message =
-                        "Имя: " + userProfile.getName() + "\n" +
-                                "Специализация: " + userProfile.getSpecialization() + "\n" +
-                                "Описание: " + userProfile.getDescription() + "\n" +
-                                "Проекты: " + userProfile.getProjects() + "\n";
+                        "**Имя:** " + userProfile.getName() + "\n" +
+                                "**Специализация:** " + userProfile.getSpecialization() + "\n" +
+                                "**Описание:** " + userProfile.getDescription() + "\n" +
+                                "**Проекты:** " + userProfile.getProjects() + "\n";
 
                 // Отправляем сообщение пользователю
                 sendMessage(chatId, message, userProfile);
@@ -416,6 +416,7 @@ public class TelegramBusinessBot extends TelegramLongPollingBot {
         order.setDeadline(update.getMessage().getText());
         businessUserInfo.setBotState(BusinessBotState.ORDER_SUM_WAIT);
         businessUserRepository.save(businessUserInfo);
+        orderRepository.save(order);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText("Напишите сколько вы готовы заплатить");
